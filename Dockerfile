@@ -1,10 +1,27 @@
-# based on https://github.com/jenkinsci/docker/blob/master/README.md
+FROM jenkins/jenkins:lts
 
-FROM jenkins/jenkins:lts-jdk11
-
-# if we want to install via apt
 USER root
-RUN apt-get update && apt-get install -y make
 
-# drop back to the regular jenkins user - good practice
-USER jenkins
+RUN apt-get update -qq \
+	&& apt-get install -qqy \
+		apt-transport-https \
+		ca-certificates \
+		curl \
+		gnupg2 \
+		software-properties-common \
+		make \
+		git
+
+# install docker
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN add-apt-repository \
+	"deb [arch=amd64] https://download.docker.com/linux/debian \
+	$(lsb_release -cs) \
+	stable"
+RUN apt-get update  -qq \
+	&& apt-get -y install docker-ce
+
+RUN usermod -aG docker jenkins
+
+# switch to jenkins user prevents docker to be run with *permission denied while trying to connect to the Docker daemon socket* complain
+#USER jenkins

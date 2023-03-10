@@ -1,5 +1,7 @@
 # About
 
+Our custom Jenkins docker is build around [Official Jenkins Docker image](https://github.com/jenkinsci/docker/blob/master/README.md).
+
 ## Initial setup
 
 To build Jenkins docker image run
@@ -42,6 +44,7 @@ local     jenkins_home
 
 so it is available also after `jenkins_container` container is removed (good for image updates).
 
+
 ## Sample C++ Jenkins job
 
 Create *Multibranch Pipeline* item with a name `sample_cmake_ctest`. In *General* section set *Display Name* to `cmake_sample_ctest`, *Description* to *CMake CTest sample with docker and Jenkins integration.*  
@@ -54,10 +57,92 @@ Click to *Add source* button in *Branch Sources* section and pick *Git*. Set *Pr
 
 Click to *Save* button.
 
+
+### issues
+
+building docker image ends up with
+
+```
+#7 [4/7] RUN useradd -d /home/developer -l -U -G sudo -m -s /bin/bash -u 0 developer
+#7 0.353 useradd: UID 0 is not unique
+#7 ERROR: executor failed running [/bin/sh -c useradd -d /home/${USER} -l -U -G sudo -m -s /bin/bash -u ${UID} ${USER}]: exit code: 4
+------
+ > [4/7] RUN useradd -d /home/developer -l -U -G sudo -m -s /bin/bash -u 0 developer:
+#7 0.353 useradd: UID 0 is not unique
+------
+ERROR: failed to solve: executor failed running [/bin/sh -c useradd -d /home/${USER} -l -U -G sudo -m -s /bin/bash -u ${UID} ${USER}]: exit code: 4
+make[1]: *** [Makefile:6: image] Error 1
+make[1]: Leaving directory '/var/jenkins_home/workspace/sample_cmake_ctest_main/docker'
+make: *** [Makefile:12: start] Error 2
+make: Leaving directory '/var/jenkins_home/workspace/sample_cmake_ctest_main/docker'
+```
+
+that is because jenkins docker is run as root with id:0
+
+
+## Enable docker pipeline
+
+In order to execute docker pipelines e.g.
+
+```
+pipeline {
+    agent {
+        docker { image 'node:16.13.1-alpine' }
+    }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'node --version'
+            }
+        }
+    }
+}
+```
+
+install [Docker](https://plugins.jenkins.io/docker-plugin/) and [Docker Pipeline](https://plugins.jenkins.io/docker-workflow/) plugins.
+
+
 # Issues
 
-- `/bin/sh: 1: docker: not found` in case of Sample C++ Jenkins job ...
+- Docker host accces is not working with Jenkins user (only root)and that makes trouble in case docker builds e.g. `sample_cmake_ctest`
 
-> Q1: Can we run docker build from inside docker Jenkins?
 
-no we can not, Jenkins complains with `/bin/sh: 1: docker: not found`
+> Q1: Can we execute docker build from inside docker Jenkins?
+
+No we can't, Jenkins complains with `/bin/sh: 1: docker: not found`.
+
+> Q2: Can we use docker agent in a `Jenkinsfile` from inside a docker Jenkins?
+
+No we can't by default.
+
+Using docker agent from from following pipeline
+
+```
+pipeline {
+    agent {
+        docker { image 'node:16.13.1-alpine' }
+    }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'node --version'
+            }
+        }
+    }
+}
+```
+
+> taken from [Using Docker with Pipeline](https://www.jenkins.io/doc/book/pipeline/docker/) article
+
+results to 
+
+```
+org.codehaus.groovy.control.MultipleCompilationErrorsException: startup failed:
+WorkflowScript: 3: Invalid agent type "docker" specified. Must be one of [any, label, none] @ line 3, column 9.
+           docker { image 'node:16.13.1-alpine' }
+           ^
+```
+
+Jenkins complain.
+
+To solve the issue install [Docker](https://plugins.jenkins.io/docker-plugin/) and [Docker Pipeline](https://plugins.jenkins.io/docker-workflow/) plugins.
