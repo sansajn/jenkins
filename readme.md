@@ -32,5 +32,24 @@ docker logs jenkins_container
 
 command e.g. to check first login token.
 
+Jenkins generated content is stored to `jenkins_home` do	cker volume
+
+```console
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     jenkins_home
+```
+
+so it is available also after `jenkins_container` container is removed (good for image updates).
+
+## Sample C++ Jenkins job
+
+
+
+# Issues
+
+- `make` not available so `git@github.com:sansajn/sample_cmake_ctest.git` can't be build
 
 > Q1: Can we run docker build from Jenkins?
+
+git@github.com:sansajn/sample_cmake_ctest.git

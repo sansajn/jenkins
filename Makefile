@@ -1,5 +1,5 @@
 HOSTNAME ?= jenkins
-IMAGE_NAME ?= ${HOSTNAME}:1.0
+IMAGE_NAME ?= ${HOSTNAME}:1.1
 CONTAINER_NAME ?= ${HOSTNAME}_container
 
 image:
@@ -9,6 +9,7 @@ start:
 	docker run --name ${CONTAINER_NAME} -d \
 		-p 8080:8080 -p 50000:50000 \
 		--restart=on-failure \
+		--volume jenkins_home:/var/jenkins_home \
 		${IMAGE_NAME} \
 	|| \
 	docker start ${CONTAINER_NAME}
