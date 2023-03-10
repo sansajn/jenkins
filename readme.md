@@ -32,7 +32,7 @@ docker logs jenkins_container
 
 command e.g. to check first login token.
 
-Jenkins generated content is stored to `jenkins_home` do	cker volume
+Jenkins generated content is stored in `jenkins_home` docker volume
 
 ```console
 $ docker volume ls
@@ -44,7 +44,15 @@ so it is available also after `jenkins_container` container is removed (good for
 
 ## Sample C++ Jenkins job
 
+Create *Multibranch Pipeline* item with a name `sample_cmake_ctest`. In *General* section set *Display Name* to `cmake_sample_ctest`, *Description* to *CMake CTest sample with docker and Jenkins integration.*  
 
+Click to *Add source* button in *Branch Sources* section and pick *Git*. Set *Project Repository* to `https://github.com/sansajn/sample_cmake_ctest.git`, then in *Discover branches* click to *Add* and pick *Filter by name (with wildcards)* and set to `main`.
+
+> **note**: `sample_cmake_ctest` is public repository so we do not need to set any credentials there
+
+(Optional) In *Scan Multibranch Pipeline Triggers* section check *Periodically if not itherwise run* checkbox and set to 1 hour.
+
+Click to *Save* button.
 
 # Issues
 
