@@ -56,8 +56,8 @@ Click to *Save* button.
 
 # Issues
 
-- `make` not available so `git@github.com:sansajn/sample_cmake_ctest.git` can't be build
+- `/bin/sh: 1: docker: not found` in case of Sample C++ Jenkins job ...
 
-> Q1: Can we run docker build from Jenkins?
+> Q1: Can we run docker build from inside docker Jenkins?
 
-git@github.com:sansajn/sample_cmake_ctest.git
+no we can not, Jenkins complains with `/bin/sh: 1: docker: not found`
