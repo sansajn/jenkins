@@ -4,6 +4,7 @@ The repository serves as a description to run Jenkins in docker container with a
 
 Custom Jenkins docker is build around [Official Jenkins Docker image](https://github.com/jenkinsci/docker/blob/master/README.md).
 
+**Contents**
 - [Initial setup](#initial-setup)
 - [Sample C++ Jenkins job](#sample-c-jenkins-job)
 - [Enable docker pipeline](#enable-docker-pipeline)
