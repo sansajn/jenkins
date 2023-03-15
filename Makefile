@@ -10,16 +10,17 @@ start:
 		-p 8080:8080 -p 50000:50000 \
 		--restart=on-failure \
 		--volume jenkins_home:/var/jenkins_home \
-		-v /var/run/docker.sock:/var/run/docker.sock \
+		--volume /var/run/docker.sock:/var/run/docker.sock \
+		--user `id -u`:`id -g` \
+		--group-add `getent group docker | cut -d ':' -f 3` \
 		${IMAGE_NAME} \
 	|| \
 	docker start ${CONTAINER_NAME}
-	echo ${DOCKER_PATH}
 
 stop:
 	-docker stop ${CONTAINER_NAME}
 
-join: start
+join:
 	docker exec -it ${CONTAINER_NAME} /bin/bash
 
 rm: stop

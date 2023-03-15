@@ -1,6 +1,14 @@
 # About
 
-Our custom Jenkins docker is build around [Official Jenkins Docker image](https://github.com/jenkinsci/docker/blob/master/README.md).
+The repository serves as a description to run Jenkins in docker container with aim to build C++ projects in a docker container.
+
+Custom Jenkins docker is build around [Official Jenkins Docker image](https://github.com/jenkinsci/docker/blob/master/README.md).
+
+- [Initial setup](#initial-setup)
+- [Sample C++ Jenkins job](#sample-c-jenkins-job)
+- [Enable docker pipeline](#enable-docker-pipeline)
+- [Issues](#issues)
+
 
 ## Initial setup
 
@@ -58,28 +66,6 @@ Click to *Add source* button in *Branch Sources* section and pick *Git*. Set *Pr
 Click to *Save* button.
 
 
-### issues
-
-building docker image ends up with
-
-```
-#7 [4/7] RUN useradd -d /home/developer -l -U -G sudo -m -s /bin/bash -u 0 developer
-#7 0.353 useradd: UID 0 is not unique
-#7 ERROR: executor failed running [/bin/sh -c useradd -d /home/${USER} -l -U -G sudo -m -s /bin/bash -u ${UID} ${USER}]: exit code: 4
-------
- > [4/7] RUN useradd -d /home/developer -l -U -G sudo -m -s /bin/bash -u 0 developer:
-#7 0.353 useradd: UID 0 is not unique
-------
-ERROR: failed to solve: executor failed running [/bin/sh -c useradd -d /home/${USER} -l -U -G sudo -m -s /bin/bash -u ${UID} ${USER}]: exit code: 4
-make[1]: *** [Makefile:6: image] Error 1
-make[1]: Leaving directory '/var/jenkins_home/workspace/sample_cmake_ctest_main/docker'
-make: *** [Makefile:12: start] Error 2
-make: Leaving directory '/var/jenkins_home/workspace/sample_cmake_ctest_main/docker'
-```
-
-that is because jenkins docker is run as root with id:0
-
-
 ## Enable docker pipeline
 
 In order to execute docker pipelines e.g.
@@ -102,7 +88,9 @@ pipeline {
 install [Docker](https://plugins.jenkins.io/docker-plugin/) and [Docker Pipeline](https://plugins.jenkins.io/docker-workflow/) plugins.
 
 
-# Issues
+## Issues
+
+Some issues I was facing during the learning process.
 
 - Docker host accces is not working with Jenkins user (only root)and that makes trouble in case docker builds e.g. `sample_cmake_ctest`
 
