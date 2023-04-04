@@ -1,6 +1,6 @@
 # About
 
-The repository serves as a description to run Jenkins in docker container with aim to build C++ projects in a docker containers.
+The repository serves as a description/starter to run Jenkins in docker container with aim to build *C++* projects in a docker containers (docker-in-docker setup).
 
 The solution is based on [Installing Jenkins/Docker](https://www.jenkins.io/doc/book/installing/docker/) article (with *docker:dind*).
 
