@@ -14,6 +14,7 @@ The solution is based on [Installing Jenkins/Docker](https://www.jenkins.io/doc/
 
 
 ## ToDo:
+- verify dind approach can build shared-copy docker setup from [sample_cmake_ctest](https://github.com/sansajn/sample_cmake_ctest) project
 - docker compose for jenkins:dind based setup
 
 ## Initial setup
